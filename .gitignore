@@ -1,0 +1,5 @@
+# Notas internas y utilidades de verificación: no se publican.
+ESTADO.md
+*.cjs
+node_modules/
+.DS_Store

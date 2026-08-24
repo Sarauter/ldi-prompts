@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F3X2FGHG1B"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-F3X2FGHG1B');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SARAUTER · Prompt Toolkit (versión 1)</title>
+<meta name="description" content="Versión 1, archivada, del Prompt Toolkit de SARAUTER: 16 prompts B2B listos para usar. Se conserva como referencia; la versión actual está en /Prompt-Toolkit/.">
+<link rel="canonical" href="https://sarauter.com/Prompt-Toolkit/v1/">
+<meta name="robots" content="noindex, follow">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sarauter.com/Prompt-Toolkit/v1/">
+<meta property="og:site_name" content="SARAUTER">
+<meta property="og:title" content="SARAUTER · Prompt Toolkit (versión 1)">
+<meta property="og:description" content="Versión 1, archivada, del Prompt Toolkit de SARAUTER. La versión actual está en sarauter.com/Prompt-Toolkit/.">
+<meta property="og:image" content="https://sarauter.com/preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SARAUTER · Prompt Toolkit (versión 1)">
+<meta name="twitter:description" content="Versión 1, archivada, del Prompt Toolkit de SARAUTER. La versión actual está en sarauter.com/Prompt-Toolkit/.">
+<meta name="twitter:image" content="https://sarauter.com/preview.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231a1a2e'/%3E%3Ctext x='32' y='44' font-family='Helvetica,Arial,sans-serif' font-size='38' font-weight='bold' fill='%23ffffff' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --purple-900: #1a1a2e;
+    --purple-800: #28283c;
+    --purple-700: #32324a;
+    --purple-600: #3c3c58;
+    --purple-500: #4a4a6e;
+    --purple-400: #5e5e8a;
+    --lilac-400: #9494b8;
+    --lilac-300: #ababc8;
+    --lilac-200: #c8c8dc;
+    --lilac-100: #eaeaf4;
+    --lilac-50:  #f5f5fa;
+    --white:     #ffffff;
+    --gray-50:   #f7f7fa;
+    --gray-100:  #ebebf2;
+    --gray-200:  #d6d6e4;
+    --gray-400:  #9898b0;
+    --gray-600:  #5a5a78;
+    --text:      #1a1a2e;
+    --text-soft: #5a5a78;
+    --text-hint: #9898b0;
+    --border:    rgba(40,40,60,0.1);
+    --border-md: rgba(40,40,60,0.2);
+    --shadow-sm: 0 1px 6px rgba(28,28,44,0.07);
+    --shadow-md: 0 4px 20px rgba(28,28,44,0.12);
+    --shadow-lg: 0 12px 48px rgba(28,28,44,0.16);
+    --radius:    10px;
+    --radius-lg: 16px;
+    --radius-xl: 22px;
+    --topbar-h:  60px;
+    --sidebar-w: 252px;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--gray-50);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    font-size: 14.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── LAYOUT ───────────────────────────────────────── */
+  .app {
+    display: grid;
+    grid-template-columns: var(--sidebar-w) 1fr;
+    grid-template-rows: var(--topbar-h) 1fr;
+    min-height: 100vh;
+  }
+
+  /* ── TOPBAR ───────────────────────────────────────── */
+  .topbar {
+    grid-column: 1 / -1;
+    background: var(--purple-800);
+    display: flex;
+    align-items: center;
+    padding: 0 28px;
+    gap: 14px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .topbar-wordmark {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: #fff;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .topbar-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--purple-600), var(--lilac-400));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .topbar-divider {
+    width: 1px; height: 22px;
+    background: rgba(255,255,255,0.12);
+    margin: 0 2px;
+  }
+
+  .topbar-sub {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+
+  .topbar-pill {
+    background: rgba(179,136,255,0.15);
+    color: var(--lilac-400);
+    border: 1px solid rgba(179,136,255,0.25);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+
+  .topbar-v2link {
+    color: var(--white);
+    font-size: 12.5px;
+    font-weight: 500;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.35);
+    padding-bottom: 1px;
+    white-space: nowrap;
+  }
+  .topbar-v2link:hover { border-bottom-color: var(--white); }
+  @media (max-width: 720px) { .topbar-pill { display: none; } }
+
+  /* ── SIDEBAR ──────────────────────────────────────── */
+  .sidebar {
+    background: var(--white);
+    border-right: 1px solid var(--border);
+    padding: 20px 12px;
+    overflow-y: auto;
+    position: sticky;
+    top: var(--topbar-h);
+    height: calc(100vh - var(--topbar-h));
+  }
+
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 4px; }
+
+  .nav-section {
+    font-family: 'Sora', sans-serif;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--lilac-400);
+    padding: 0 8px;
+    margin-bottom: 4px;
+    margin-top: 20px;
+  }
+
+  .nav-section:first-child { margin-top: 0; }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 10px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 0.1s, color 0.1s;
+    color: var(--text-soft);
+    font-size: 13.5px;
+    font-weight: 400;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .nav-item:hover { background: var(--lilac-100); color: var(--purple-600); }
+
+  .nav-item.active {
+    background: linear-gradient(90deg, var(--lilac-100), rgba(179,136,255,0.06));
+    color: var(--purple-600);
+    font-weight: 600;
+    border-left: 3px solid var(--purple-400);
+    padding-left: 7px;
+  }
+
+  .nav-icon {
+    width: 26px; height: 26px;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+    background: var(--gray-100);
+  }
+
+  .nav-item.active .nav-icon { background: rgba(124,63,204,0.1); }
+
+  .nav-count {
+    margin-left: auto;
+    font-size: 10.5px;
+    color: var(--text-hint);
+    background: var(--gray-100);
+    padding: 1px 6px;
+    border-radius: 20px;
+  }
+
+  /* ── MAIN ─────────────────────────────────────────── */
+  .main {
+    padding: 36px 40px;
+    overflow-y: auto;
+    height: calc(100vh - var(--topbar-h));
+  }
+
+  .main::-webkit-scrollbar { width: 4px; }
+  .main::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 4px; }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .page-header { margin-bottom: 28px; }
+
+  .page-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 5px;
+    letter-spacing: -0.02em;
+  }
+
+  .page-desc {
+    font-size: 13.5px;
+    color: var(--text-soft);
+    max-width: 500px;
+    font-weight: 300;
+  }
+
+  /* ── STAT CARDS ───────────────────────────────────── */
+  .stats-row {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 28px;
+    max-width: 360px;
+  }
+
+  .stat-card {
+    flex: 1;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--purple-500), var(--lilac-400));
+  }
+
+  .stat-num {
+    font-family: 'Sora', sans-serif;
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--purple-700);
+    line-height: 1;
+    margin-bottom: 4px;
+    letter-spacing: -0.03em;
+  }
+
+  .stat-lbl { font-size: 12px; color: var(--text-soft); font-weight: 300; }
+
+  /* ── INFO CARD (before you start) ────────────────── */
+  .info-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 26px 30px;
+    margin-bottom: 22px;
+  }
+
+  .info-card-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .info-card-title::before {
+    content: '';
+    display: block;
+    width: 3px; height: 18px;
+    background: linear-gradient(180deg, var(--purple-500), var(--lilac-400));
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .info-card-sub {
+    font-size: 13px;
+    color: var(--text-soft);
+    margin-bottom: 22px;
+    padding-left: 13px;
+    font-weight: 300;
+  }
+
+  .tip-list { display: flex; flex-direction: column; gap: 14px; }
+
+  .tip {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .tip-num {
+    min-width: 26px; height: 26px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple-600), var(--lilac-400));
+    color: #fff;
+    font-family: 'Sora', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .tip-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .tip-desc  { font-size: 12.5px; color: var(--text-soft); line-height: 1.55; font-weight: 300; }
+
+  .tip-divider {
+    height: 1px;
+    background: var(--border);
+    margin-left: 40px;
+  }
+
+  /* ── HOW IT WORKS ─────────────────────────────────── */
+  .how-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 26px 30px;
+    margin-bottom: 22px;
+  }
+
+  .how-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .how-sub { font-size: 13px; color: var(--text-soft); margin-bottom: 20px; font-weight: 300; }
+
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+  .step { display: flex; flex-direction: column; gap: 8px; }
+
+  .step-n {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple-600), var(--lilac-400));
+    color: #fff;
+    font-family: 'Sora', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .step-t { font-size: 13px; font-weight: 600; color: var(--text); }
+  .step-d { font-size: 12.5px; color: var(--text-soft); line-height: 1.5; font-weight: 300; }
+
+  /* ── BOTTOM BANNER ────────────────────────────────── */
+  .banner {
+    background: linear-gradient(135deg, var(--purple-800) 0%, var(--purple-500) 100%);
+    border-radius: var(--radius-xl);
+    padding: 26px 30px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .banner::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .banner-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+    position: relative;
+  }
+
+  .banner-body {
+    font-size: 13px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.72);
+    max-width: 520px;
+    font-weight: 300;
+    position: relative;
+  }
+
+  /* ── BUILDER ──────────────────────────────────────── */
+  .builder {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .builder-head {
+    background: linear-gradient(90deg, var(--purple-800), var(--purple-700));
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--lilac-400);
+  }
+
+  .builder-head-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .builder-head-sub {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.45);
+    margin-top: 2px;
+    font-weight: 300;
+  }
+
+  .builder-body { padding: 24px; }
+
+  .var-section { margin-bottom: 22px; }
+
+  .var-section-lbl {
+    font-family: 'Sora', sans-serif;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--purple-400);
+    margin-bottom: 12px;
+  }
+
+  .vars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .var-field { display: flex; flex-direction: column; gap: 4px; }
+
+  .var-lbl {
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--text-soft);
+  }
+
+  .var-input {
+    font-size: 13px;
+    padding: 9px 12px;
+    border: 1.5px solid var(--border-md);
+    border-radius: var(--radius);
+    background: var(--gray-50);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    transition: border-color 0.12s, box-shadow 0.12s, background 0.12s;
+    outline: none;
+  }
+
+  .var-input:focus {
+    border-color: var(--purple-400);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(124,63,204,0.1);
+  }
+
+  .var-input::placeholder { color: var(--text-hint); font-weight: 300; }
+
+  .output-section { margin-bottom: 20px; }
+
+  .output-lbl {
+    font-family: 'Sora', sans-serif;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--purple-400);
+    margin-bottom: 8px;
+  }
+
+  .output-box {
+    background: var(--lilac-50);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    font-family: 'DM Sans', monospace;
+    font-size: 12.5px;
+    line-height: 1.85;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-break: break-word;
+    min-height: 160px;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .output-empty {
+    color: var(--text-hint);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-style: italic;
+    text-align: center;
+    padding: 40px 0;
+    font-weight: 300;
+  }
+
+  .hl { color: var(--purple-500); font-weight: 600; }
+
+  .actions-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  /* ── BUTTONS ──────────────────────────────────────── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 18px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.14s;
+    font-family: 'DM Sans', sans-serif;
+    border: none;
+    outline: none;
+    letter-spacing: 0.01em;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--purple-600), var(--purple-500));
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(90,45,158,0.3);
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, var(--purple-700), var(--purple-600));
+    box-shadow: 0 4px 16px rgba(90,45,158,0.4);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:active { transform: scale(0.97); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-soft);
+    border: 1.5px solid var(--border-md);
+  }
+
+  .btn-ghost:hover { background: var(--gray-100); color: var(--text); }
+
+  /* ── TOAST ────────────────────────────────────────── */
+  .toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--purple-800);
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0;
+    transition: all 0.28s cubic-bezier(0.34,1.56,0.64,1);
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(179,136,255,0.2);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── RESPONSIVE ───────────────────────────────────── */
+  @media (max-width: 720px) {
+    .app { grid-template-columns: 1fr; grid-template-rows: var(--topbar-h) auto 1fr; }
+    .sidebar {
+      position: static;
+      height: auto;
+      display: flex;
+      flex-wrap: wrap;
+      padding: 10px;
+      gap: 4px;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-section { display: none; }
+    .nav-item { width: auto; padding: 6px 12px; font-size: 12.5px; }
+    .nav-count { display: none; }
+    .main { padding: 20px 16px; height: auto; }
+    .steps { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-wordmark">
+      <a href="https://sarauter.com/" aria-label="SARAUTER — inicio" style="display:flex; align-items:center;">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAADICAYAAAAeGRPoAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAExmlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSfvu78nIGlkPSdXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQnPz4KPHg6eG1wbWV0YSB4bWxuczp4PSdhZG9iZTpuczptZXRhLyc+CjxyZGY6UkRGIHhtbG5zOnJkZj0naHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyc+CgogPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9JycKICB4bWxuczpBdHRyaWI9J2h0dHA6Ly9ucy5hdHRyaWJ1dGlvbi5jb20vYWRzLzEuMC8nPgogIDxBdHRyaWI6QWRzPgogICA8cmRmOlNlcT4KICAgIDxyZGY6bGkgcmRmOnBhcnNlVHlwZT0nUmVzb3VyY2UnPgogICAgIDxBdHRyaWI6Q3JlYXRlZD4yMDI2LTAxLTAyPC9BdHRyaWI6Q3JlYXRlZD4KICAgICA8QXR0cmliOkV4dElkPjAyNDY5NWNiLWVkZDMtNDc0Ny04NjUyLWE5OTliMDUzOWE2NjwvQXR0cmliOkV4dElkPgogICAgIDxBdHRyaWI6RmJJZD41MjUyNjU5MTQxNzk1ODA8L0F0dHJpYjpGYklkPgogICAgIDxBdHRyaWI6VG91Y2hUeXBlPjI8L0F0dHJpYjpUb3VjaFR5cGU+CiAgICA8L3JkZjpsaT4KICAgPC9yZGY6U2VxPgogIDwvQXR0cmliOkFkcz4KIDwvcmRmOkRlc2NyaXB0aW9uPgoKIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PScnCiAgeG1sbnM6ZGM9J2h0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvJz4KICA8ZGM6dGl0bGU+CiAgIDxyZGY6QWx0PgogICAgPHJkZjpsaSB4bWw6bGFuZz0neC1kZWZhdWx0Jz5TYXJhdXRlciBMb2dvICg1MDAgeCAyMDAgcHgpIC0gMjwvcmRmOmxpPgogICA8L3JkZjpBbHQ+CiAgPC9kYzp0aXRsZT4KIDwvcmRmOkRlc2NyaXB0aW9uPgoKIDxy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" alt="SARAUTER" style="height:32px;width:auto;display:block;">
+      </a>
+    </div>
+    <div class="topbar-divider"></div>
+    <span class="topbar-sub">Prompt Toolkit</span>
+    <div class="topbar-right">
+      <span class="topbar-pill">Versión 1 · archivada</span>
+      <a class="topbar-v2link" href="https://sarauter.com/Prompt-Toolkit/">Ver la versión actual →</a>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="nav-section">Inicio</div>
+    <button class="nav-item active" onclick="navigate('home', this)">
+      <span class="nav-icon">🏠</span>
+      Inicio
+    </button>
+
+    <div class="nav-section">Contenido</div>
+    <button class="nav-item" onclick="navigate('linkedin', this)">
+      <span class="nav-icon">💼</span>
+      Post LinkedIn
+      <span class="nav-count">1</span>
+    </button>
+    <button class="nav-item" onclick="navigate('brief', this)">
+      <span class="nav-icon">📋</span>
+      Brief de campaña
+      <span class="nav-count">1</span>
+    </button>
+    <button class="nav-item" onclick="navigate('web', this)">
+      <span class="nav-icon">🌐</span>
+      Copy web
+      <span class="nav-count">1</span>
+    </button>
+    <button class="nav-item" onclick="navigate('onepager', this)">
+      <span class="nav-icon">📄</span>
+      One-pager comercial
+      <span class="nav-count">1</span>
+    </button>
+
+    <div class="nav-section">Comunicación interna</div>
+    <button class="nav-item" onclick="navigate('email', this)">
+      <span class="nav-icon">✉️</span>
+      Email ejecutivo
+      <span class="nav-count">1</span>
+    </button>
+    <button class="nav-item" onclick="navigate('anuncio', this)">
+      <span class="nav-icon">📢</span>
+      Anuncio al equipo
+      <span class="nav-count">1</span>
+    </button>
+    <button class="nav-item" onclick="navigate('update', this)">
+      <span class="nav-icon">📊</span>
+      Update a stakeholders
+      <span class="nav-count">1</span>
+    </button>
+    <button class="nav-item" onclick="navigate('slack', this)">
+      <span class="nav-icon">💬</span>
+      Mensaje Slack / chat
+      <span class="nav-count">1</span>
+    </button>
+
+    <div class="nav-section">Reuniones</div>
+    <button class="nav-item" onclick="navigate('agenda', this)">
+      <span class="nav-icon">📅</span>
+      Agenda de reunión
+      <span class="nav-count">1</span>
+    </button>
+    <button class="nav-item" onclick="navigate('acta', this)">
+      <span class="nav-icon">📝</span>
+      Acta y acuerdos
+      <span class="nav-count">1</span>
+    </button>
+    <button class="nav-item" onclick="navigate('prep', this)">
+      <span class="nav-icon">🎯</span>
+      Prep de reunión
+      <span class="nav-count">1</span>
+    </button>
+
+    <div class="nav-section">Estrategia</div>
+    <button class="nav-item" onclick="navigate('evento', this)">
+      <span class="nav-icon">🗓</span>
+      Propuesta de evento
+      <span class="nav-count">1</span>
+    </button>
+    <button class="nav-item" onclick="navigate('caso', this)">
+      <span class="nav-icon">⭐</span>
+      Caso de éxito
+      <span class="nav-count">1</span>
+    </button>
+    <button class="nav-item" onclick="navigate('resumen', this)">
+      <span class="nav-icon">📑</span>
+      Resumen ejecutivo
+      <span class="nav-count">1</span>
+    </button>
+    <button class="nav-item" onclick="navigate('presupuesto', this)">
+      <span class="nav-icon">💰</span>
+      Propuesta de presupuesto
+      <span class="nav-count">1</span>
+    </button>
+
+    <div class="nav-section">Research</div>
+    <button class="nav-item" onclick="navigate('research', this)">
+      <span class="nav-icon">🔍</span>
+      Investigación online
+      <span class="nav-count">1</span>
+    </button>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- HOME -->
+    <div id="page-home" class="page active">
+      <div class="page-header">
+        <div class="page-title">Prompt Toolkit</div>
+        <div class="page-desc">Prompts estructurados para que el equipo produzca resultados consistentes, rápido.</div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num">16</div>
+          <div class="stat-lbl">Prompts disponibles</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">5</div>
+          <div class="stat-lbl">Categorías</div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card-title">Antes de empezar — lee esto</div>
+        <div class="info-card-sub">Cinco cosas que necesitas saber si es tu primera vez usando inteligencia artificial.</div>
+        <div class="tip-list">
+          <div class="tip">
+            <div class="tip-num">1</div>
+            <div>
+              <div class="tip-title">La IA no adivina — tú le das el contexto</div>
+              <div class="tip-desc">Cuanto más específico seas al llenar los campos, mejor será el resultado. No te preocupes por escribir perfecto — escribe claro.</div>
+            </div>
+          </div>
+          <div class="tip-divider"></div>
+          <div class="tip">
+            <div class="tip-num">2</div>
+            <div>
+              <div class="tip-title">El primer resultado no siempre es el definitivo</div>
+              <div class="tip-desc">Trátalo como un primer borrador. Puedes pedirle que lo acorte, que cambie el tono, o que enfoque algo diferente. La IA responde a instrucciones.</div>
+            </div>
+          </div>
+          <div class="tip-divider"></div>
+          <div class="tip">
+            <div class="tip-num">3</div>
+            <div>
+              <div class="tip-title">Siempre revisa antes de usar</div>
+              <div class="tip-desc">La IA puede cometer errores de datos o inventar detalles. Revisa los números, nombres y hechos antes de enviar o publicar cualquier contenido.</div>
+            </div>
+          </div>
+          <div class="tip-divider"></div>
+          <div class="tip">
+            <div class="tip-num">4</div>
+            <div>
+              <div class="tip-title">Los prompts de esta herramienta ya están optimizados</div>
+              <div class="tip-desc">No necesitas saber hablarle a la IA desde cero. Los prompts ya tienen la estructura correcta. Solo llena los campos y copia.</div>
+            </div>
+          </div>
+          <div class="tip-divider"></div>
+          <div class="tip">
+            <div class="tip-num">5</div>
+            <div>
+              <div class="tip-title">La IA trabaja mejor en el idioma del resultado</div>
+              <div class="tip-desc">Si quieres el resultado en español, escribe los campos en español. Si lo necesitas en inglés, escríbelos en inglés. La IA sigue tu idioma.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="how-card">
+        <div class="how-title">¿Cómo funciona?</div>
+        <div class="how-sub">Tres pasos. Sin curva de aprendizaje.</div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-n">1</div>
+            <div class="step-t">Elige un prompt</div>
+            <div class="step-d">Selecciona el tipo de contenido que necesitas desde el menú lateral.</div>
+          </div>
+          <div class="step">
+            <div class="step-n">2</div>
+            <div class="step-t">Llena las variables</div>
+            <div class="step-d">Completa los campos específicos. El prompt se arma solo.</div>
+          </div>
+          <div class="step">
+            <div class="step-n">3</div>
+            <div class="step-t">Copia y pega</div>
+            <div class="step-d">Pega el prompt en Claude o cualquier otra IA. Listo.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="banner">
+        <div class="banner-title">¿Por qué esto importa?</div>
+        <div class="banner-body">Un equipo que usa IA con estructura produce resultados consistentes. Un equipo que improvisa cada prompt produce resultados aleatorios. Este sistema convierte la IA en una ventaja operativa real.</div>
+      </div>
+    </div>
+
+    <!-- ── PROMPT PAGES ─────────────────────────────── -->
+
+    <div id="page-linkedin" class="page">
+      <div class="page-header">
+        <div class="page-title">Post para LinkedIn</div>
+        <div class="page-desc">Thought leadership con voz estratégica. Sin marketing genérico.</div>
+      </div>
+      <div class="builder">
+        <div class="builder-head">
+          <div>
+            <div class="builder-head-title">Generador de prompt · Post LinkedIn</div>
+            <div class="builder-head-sub">Llena los campos para construir tu prompt personalizado</div>
+          </div>
+        </div>
+        <div class="builder-body">
+          <div class="var-section">
+            <div class="var-section-lbl">Variables del prompt</div>
+            <div class="vars-grid">
+              <div class="var-field"><label class="var-lbl">Tema o insight</label><input class="var-input" type="text" placeholder="Ej: expansión de fibra en México" data-key="TEMA_O_INSIGHT" oninput="buildPrompt('linkedin')"></div>
+              <div class="var-field"><label class="var-lbl">Tono</label><input class="var-input" type="text" placeholder="Ej: analítico / directo / humano" data-key="TONO" oninput="buildPrompt('linkedin')"></div>
+              <div class="var-field"><label class="var-lbl">CTA deseado</label><input class="var-input" type="text" placeholder="Ej: ¿Qué opina tu equipo?" data-key="CTA" oninput="buildPrompt('linkedin')"></div>
+            </div>
+          </div>
+          <div class="output-section">
+            <div class="output-lbl">Tu prompt listo para copiar</div>
+            <div class="output-box" id="output-linkedin"><span class="output-empty">Completa los campos arriba para ver tu prompt.</span></div>
+          </div>
+          <div class="actions-row">
+            <button class="btn btn-primary" onclick="copyPrompt('linkedin')">📋 Copiar prompt</button>
+            <button class="btn btn-ghost" onclick="clearPrompt('linkedin')">Limpiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-brief" class="page">
+      <div class="page-header">
+        <div class="page-title">Brief de campaña</div>
+        <div class="page-desc">Estructura completa de brief para campañas B2B.</div>
+      </div>
+      <div class="builder">
+        <div class="builder-head">
+          <div>
+            <div class="builder-head-title">Generador de prompt · Brief de campaña</div>
+            <div class="builder-head-sub">Llena los campos para construir tu prompt personalizado</div>
+          </div>
+        </div>
+        <div class="builder-body">
+          <div class="var-section">
+            <div class="var-section-lbl">Variables del prompt</div>
+            <div class="vars-grid">
+              <div class="var-field"><label class="var-lbl">Objetivo de la campaña</label><input class="var-input" type="text" placeholder="Ej: generar leads en operadores" data-key="OBJETIVO_CAMPANA" oninput="buildPrompt('brief')"></div>
+              <div class="var-field"><label class="var-lbl">Público objetivo</label><input class="var-input" type="text" placeholder="Ej: CTOs de ISPs en Colombia" data-key="PUBLICO_OBJETIVO" oninput="buildPrompt('brief')"></div>
+              <div class="var-field"><label class="var-lbl">Mensaje clave</label><input class="var-input" type="text" placeholder="Ej: infraestructura sin interrupciones" data-key="MENSAJE_CLAVE" oninput="buildPrompt('brief')"></div>
+            </div>
+          </div>
+          <div class="output-section">
+            <div class="output-lbl">Tu prompt listo para copiar</div>
+            <div class="output-box" id="output-brief"><span class="output-empty">Completa los campos arriba para ver tu prompt.</span></div>
+          </div>
+          <div class="actions-row">
+            <button class="btn btn-primary" onclick="copyPrompt('brief')">📋 Copiar prompt</button>
+            <button class="btn btn-ghost" onclick="clearPrompt('brief')">Limpiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-web" class="page">
+      <div class="page-header">
+        <div class="page-title">Copy para web</div>
+        <div class="page-desc">Textos para secciones o páginas de sitios web.</div>
+      </div>
+      <div class="builder">
+        <div class="builder-head">
+          <div>
+            <div class="builder-head-title">Generador de prompt · Copy web</div>
+            <div class="builder-head-sub">Llena los campos para construir tu prompt personalizado</div>
+          </div>
+        </div>
+        <div class="builder-body">
+          <div class="var-section">
+            <div class="var-section-lbl">Variables del prompt</div>
+            <div class="vars-grid">
+              <div class="var-field"><label class="var-lbl">Página o sección</label><input class="var-input" type="text" placeholder="Ej: sección de data centers" data-key="PAGINA_O_SECCION" oninput="buildPrompt('web')"></div>
+              <div class="var-field"><label class="var-lbl">Objetivo de la sección</label><input class="var-input" type="text" placeholder="Ej: convencer de solicitar demo" data-key="OBJETIVO_SECCION" oninput="buildPrompt('web')"></div>
+              <div class="var-field"><label class="var-lbl">Dato clave a incluir</label><input class="var-input" type="text" placeholder="Ej: 20 data centers en LATAM" data-key="DATO_CLAVE" oninput="buildPrompt('web')"></div>
+            </div>
+          </div>
+          <div class="output-section">
+            <div class="output-lbl">Tu prompt listo para copiar</div>
+            <div class="output-box" id="output-web"><span class="output-empty">Completa los campos arriba para ver tu prompt.</span></div>
+          </div>
+          <div class="actions-row">
+            <button class="btn btn-primary" onclick="copyPrompt('web')">📋 Copiar prompt</button>
+            <button class="btn btn-ghost" onclick="clearPrompt('web')">Limpiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-onepager" class="page">
+      <div class="page-header">
+        <div class="page-title">One-pager comercial</div>
+        <div class="page-desc">Documento de una página para presentar una solución al mercado.</div>
+      </div>
+      <div class="builder">
+        <div class="builder-head">
+          <div>
+            <div class="builder-head-title">Generador de prompt · One-pager</div>
+            <div class="builder-head-sub">Llena los campos para construir tu prompt personalizado</div>
+          </div>
+        </div>
+        <div class="builder-body">
+          <div class="var-section">
+            <div class="var-section-lbl">Variables del prompt</div>
+            <div class="vars-grid">
+              <div class="var-field"><label class="var-lbl">Producto o solución</label><input class="var-input" type="text" placeholder="Ej: conectividad MPLS regional" data-key="PRODUCTO_SOLUCION" oninput="buildPrompt('onepager')"></div>
+              <div class="var-field"><label class="var-lbl">Perfil del cliente objetivo</label><input class="var-input" type="text" placeholder="Ej: Head of Network en banco" data-key="PERFIL_CLIENTE" oninput="buildPrompt('onepager')"></div>
+              <div class="var-field"><label class="var-lbl">Top 3 diferenciadores</label><input class="var-input" type="text" placeholder="Ej: presencia en 17 países, SLA 99.9%, 24/7" data-key="DIFERENCIADORES" oninput="buildPrompt('onepager')"></div>
+            </div>
+          </div>
+          <div class="output-section">
+            <div class="output-lbl">Tu prompt listo para copiar</div>
+            <div class="output-box" id="output-onepager"><span class="output-empty">Completa los campos arriba para ver tu prompt.</span></div>
+          </div>
+          <div class="actions-row">
+            <button class="btn btn-primary" onclick="copyPrompt('onepager')">📋 Copiar prompt</button>
+            <button class="btn btn-ghost" onclick="clearPrompt('onepager')">Limpiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-email" class="page">
+      <div class="page-header">
+        <div class="page-title">Email ejecutivo</div>
+        <div class="page-desc">Emails directos y bien estructurados para comunicaciones a nivel C-level.</div>
+      </div>
+      <div class="builder">
+        <div class="builder-head">
+          <div>
+            <div class="builder-head-title">Generador de prompt · Email ejecutivo</div>
+            <div class="builder-head-sub">Llena los campos para construir tu prompt personalizado</div>
+          </div>
+        </div>
+        <div class="builder-body">
+          <div class="var-section">
+            <div class="var-section-lbl">Variables del prompt</div>
+            <div class="vars-grid">
+              <div class="var-field"><label class="var-lbl">Destinatario y cargo</label><input class="var-input" type="text" placeholder="Ej: Pablo Pérez, Chief BD Officer" data-key="DESTINATARIO_CARGO" oninput="buildPrompt('email')"></div>
+              <div class="var-field"><label class="var-lbl">Propósito del email</label><input class="var-input" type="text" placeholder="Ej: solicitar aprobación de presupuesto Q2" data-key="PROPOSITO_EMAIL" oninput="buildPrompt('email')"></div>
+              <div class="var-field"><label class="var-lbl">Pedido o próximo paso</label><input class="var-input" type="text" placeholder="Ej: llamada de 20 min esta semana" data-key="PEDIDO_PROXIMO_PASO" oninput="buildPrompt('email')"></div>
+            </div>
+          </div>
+          <div class="output-section">
+            <div class="output-lbl">Tu prompt listo para copiar</div>
+            <div class="output-box" id="output-email"><span class="output-empty">Completa los campos arriba para ver tu prompt.</span></div>
+          </div>
+          <div class="actions-row">
+            <button class="btn btn-primary" onclick="copyPrompt('email')">📋 Copiar prompt</button>
+            <button class="btn btn-ghost" onclick="clearPrompt('email')">Limpiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-anuncio" class="page">
+      <div class="page-header">
+        <div class="page-title">Anuncio al equipo</div>
+        <div class="page-desc">Comunicados internos claros y honestos. Sin spin corporativo.</div>
+      </div>
+      <div class="builder">
+        <div class="builder-head">
+          <div>
+            <div class="builder-head-title">Generador de prompt · Anuncio interno</div>
+            <div class="builder-head-sub">Llena los campos para construir tu prompt personalizado</div>
+          </div>
+        </div>
+        <div class="builder-body">
+          <div class="var-section">
+            <div class="var-section-lbl">Variables del prompt</div>
+            <div class="vars-grid">
+              <div class="var-field"><label class="var-lbl">¿Qué se anuncia?</label><input class="var-input" type="text" placeholder="Ej: cambio en estructura de reporte" data-key="QUE_SE_ANUNCIA" oninput="buildPrompt('anuncio')"></div>
+              <div class="var-field"><label class="var-lbl">A quién afecta</label><input class="var-input" type="text" placeholder="Ej: directores de marketing" data-key="A_QUIEN_AFECTA" oninput="buildPrompt('anuncio')"></div>
+              <div class="var-field"><label class="var-lbl">Acción requerida</label><input class="var-input" type="text" placeholder="Ej: confirmar asistencia antes del viernes" data-key="ACCION_REQUERIDA" oninput="buildPrompt('anuncio')"></div>
+            </div>
+          </div>
+          <div class="output-section">
+            <div class="output-lbl">Tu prompt listo para copiar</div>
+            <div class="output-box" id="output-anuncio"><span class="output-empty">Completa los campos arriba para ver tu prompt.</span></div>
+          </div>
+          <div class="actions-row">
+            <button class="btn btn-primary" onclick="copyPrompt('anuncio')">📋 Copiar prompt</button>
+            <button class="btn btn-ghost" onclick="clearPrompt('anuncio')">Limpiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-update" class="page">
+      <div class="page-header">
+        <div class="page-title">Update a stakeholders</div>
+        <div class="page-desc">Actualizaciones de estado claras y sin adornos para directivos.</div>
+      </div>
+      <div class="builder">
+        <div class="builder-head">
+          <div>
+            <div class="builder-head-title">Generador de prompt · Update stakeholders</div>
+            <div class="builder-head-sub">Llena los campos para construir tu prompt personalizado</div>
+          </div>
+        </div>
+        <div class="builder-body">
+          <div class="var-section">
+            <div class="var-section-lbl">Variables del prompt</div>
+            <div class="vars-grid">
+              <div class="var-field"><label class="var-lbl">Proyecto o iniciativa</label><input class="var-input" type="text" placeholder="Ej: lanzamiento nueva marca" data-key="PROYECTO_INICIATIVA" oninput="buildPrompt('update')"></div>
+              <div class="var-field"><label class="var-lbl">Estado actual</label><input class="var-input" type="text" placeholder="Ej: en tiempo, fase 2 completada" data-key="ESTADO_ACTUAL" oninput="buildPrompt('update')"></div>
+              <div class="var-field"><label class="var-lbl">Riesgos o bloqueos</label><input class="var-input" type="text" placeholder="Ej: aprobación legal pendiente" data-key="RIESGOS_BLOQUEOS" oninput="buildPrompt('update')"></div>
+            </div>
+          </div>
+          <div class="output-section">
+            <div class="output-lbl">Tu prompt listo para copiar</div>
+            <div class="output-box" id="output-update"><span class="output-empty">Completa los campos arriba para ver tu prompt.</span></div>
+          </div>
+          <div class="actions-row">
+            <button class="btn btn-primary" onclick="copyPrompt('update')">📋 Copiar prompt</button>
+            <button class="btn btn-ghost" onclick="clearPrompt('update')">Limpiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-slack" class="page">
+      <div class="page-header">
+        <div class="page-title">Mensaje Slack / chat</div>
+        <div class="page-desc">Mensajes asincrónicos cortos, directos y sin relleno.</div>
+      </div>
+      <div class="builder">
+        <div class="builder-head">
+          <div>
+            <div class="builder-head-title">Generador de prompt · Slack / chat</div>
+            <div class="builder-head-sub">Llena los campos para construir tu prompt personalizado</div>
+          </div>
+        </div>
+        <div class="builder-body">
+          <div class="var-section">
+            <div class="var-section-lbl">Variables del prompt</div>
+            <div class="vars-grid">
+              <div class="var-field"><label class="var-lbl">Contexto del mensaje</label><input class="var-input" type="text" placeholder="Ej: recordatorio de entrega de materiales" data-key="CONTEXTO_MENSAJE" oninput="buildPrompt('slack')"></div>
+              <div class="var-field"><label class="var-lbl">Qué necesitas del receptor</label><input class="var-input" type="text" placeholder="Ej: confirmar recepción antes de las 6pm" data-key="NECESITAS_DEL_RECEPTOR" oninput="buildPrompt('slack')"></div>
+              <div class="var-field"><label class="var-lbl">Nivel de urgencia</label><input class="var-input" type="text" placeholder="Ej: medio / alto / bajo" data-key="NIVEL_URGENCIA" oninput="buildPrompt('slack')"></div>
+            </div>
+          </div>
+          <div class="output-section">
+            <div class="output-lbl">Tu prompt listo para copiar</div>
+            <div class="output-box" id="output-slack"><span class="output-empty">Completa los campos arriba para ver tu prompt.</span></div>
+          </div>
+          <div class="actions-row">
+            <button class="btn btn-primary" onclick="copyPrompt('slack')">📋 Copiar prompt</button>
+            <button class="btn btn-ghost" onclick="clearPrompt('slack')">Limpiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-agenda" class="page">
+      <div class="page-header">
+        <div class="page-title">Agenda de reunión</div>
+        <div class="page-desc">Estructura de agenda con tiempo por ítem, dueños y tipo de decisión.</div>
+      </div>
+      <div class="builder">
+        <div class="builder-head">
+          <div>
+            <div class="builder-head-title">Generador de prompt · Agenda de reunión</div>
+            <div class="builder-head-sub">Llena los campos para construir tu prompt personalizado</div>
+          </div>
+        </div>
+        <div class="builder-body">
+          <div class="var-section">
+            <div class="var-section-lbl">Variables del prompt</div>
+            <div class="vars-grid">
+              <div class="var-field"><label class="var-lbl">Propósito de la reunión</label><input class="var-input" type="text" placeholder="Ej: revisión trimestral de marketing" data-key="PROPOSITO_REUNION" oninput="buildPrompt('agenda')"></div>
+              <div class="var-field"><label class="var-lbl">Asistentes y roles</label><input class="var-input" type="text" placeholder="Ej: Andrea (LDI), Directores Mk" data-key="ASISTENTES_ROLES" oninput="buildPrompt('agenda')"></div>
+              <div class="var-field"><label class="var-lbl">Resultado esperado</label><input class="var-input" type="text" placeholder="Ej: alinear plan Q2 y asignar responsables" data-key="RESULTADO_ESPERADO" oninput="buildPrompt('agenda')"></div>
+            </div>
+          </div>
+          <div class="output-section">
+            <div class="output-lbl">Tu prompt listo para copiar</div>
+            <div class="output-box" id="output-agenda"><span class="output-empty">Completa los campos arriba para ver tu prompt.</span></div>
+          </div>
+          <div class="actions-row">
+            <button class="btn btn-primary" onclick="copyPrompt('agenda')">📋 Copiar prompt</button>
+            <button class="btn btn-ghost" onclick="clearPrompt('agenda')">Limpiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-acta" class="page">
+      <div class="page-header">
+        <div class="page-title">Acta y acuerdos</div>
+        <div class="page-desc">Resumen post-reunión con decisiones tomadas, acciones y responsables.</div>
+      </div>
+      <div class="builder">
+        <div class="builder-head">
+          <div>
+            <div class="builder-head-title">Generador de prompt · Acta de reunión</div>
+            <div class="builder-head-sub">Llena los campos para construir tu prompt personalizado</div>
+          </div>
+        </div>
+        <div class="builder-body">
+          <div class="var-section">
+            <div class="var-section-lbl">Variables del prompt</div>
+            <div class="vars-grid">
+              <div class="var-field"><label class="var-lbl">Notas o puntos clave tratados</label><input class="var-input" type="text" placeholder="Ej: se aprobó presupuesto de evento" data-key="NOTAS_PUNTOS_CLAVE" oninput="buildPrompt('acta')"></div>
+              <div class="var-field"><label class="var-lbl">Asistentes</label><input class="var-input" type="text" placeholder="Ej: Álvaro, Andrea, Pablo" data-key="ASISTENTES" oninput="buildPrompt('acta')"></div>
+              <div class="var-field"><label class="var-lbl">Fecha límite de acciones</label><input class="var-input" type="text" placeholder="Ej: viernes 21 de marzo" data-key="FECHA_LIMITE" oninput="buildPrompt('acta')"></div>
+            </div>
+          </div>
+          <div class="output-section">
+            <div class="output-lbl">Tu prompt listo para copiar</div>
+            <div class="output-box" id="output-acta"><span class="output-empty">Completa los campos arriba para ver tu prompt.</span></div>
+          </div>
+          <div class="actions-row">
+            <button class="btn btn-primary" onclick="copyPrompt('acta')">📋 Copiar prompt</button>
+            <button class="btn btn-ghost" onclick="clearPrompt('acta')">Limpiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-prep" class="page">
+      <div class="page-header">
+        <div class="page-title">Preparación de reunión</div>
+        <div class="page-desc">Brief de preparación para reuniones importantes.</div>
+      </div>
+      <div class="builder">
+        <div class="builder-head">
+          <div>
+            <div class="builder-head-title">Generador de prompt · Prep de reunión</div>
+            <div class="builder-head-sub">Llena los campos para construir tu prompt personalizado</div>
+          </div>
+        </div>
+        <div class="builder-body">
+          <div class="var-section">
+            <div class="var-section-lbl">Variables del prompt</div>
+            <div class="vars-grid">
+              <div class="var-field"><label class="var-lbl">Tipo de reunión y asistentes</label><input class="var-input" type="text" placeholder="Ej: presentación propuesta a directivo" data-key="TIPO_REUNION_ASISTENTES" oninput="buildPrompt('prep')"></div>
+              <div class="var-field"><label class="var-lbl">Objetivo de la reunión</label><input class="var-input" type="text" placeholder="Ej: obtener aprobación para plan 6 meses" data-key="OBJETIVO_REUNION" oninput="buildPrompt('prep')"></div>
+              <div class="var-field"><label class="var-lbl">Riesgos o sensibilidades</label><input class="var-input" type="text" placeholder="Ej: resistencia a presupuesto adicional" data-key="RIESGOS_SENSIBILIDADES" oninput="buildPrompt('prep')"></div>
+            </div>
+          </div>
+          <div class="output-section">
+            <div class="output-lbl">Tu prompt listo para copiar</div>
+            <div class="output-box" id="output-prep"><span class="output-empty">Completa los campos arriba para ver tu prompt.</span></div>
+          </div>
+          <div class="actions-row">
+            <button class="btn btn-primary" onclick="copyPrompt('prep')">📋 Copiar prompt</button>
+            <button class="btn btn-ghost" onclick="clearPrompt('prep')">Limpiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-evento" class="page">
+      <div class="page-header">
+        <div class="page-title">Propuesta de evento</div>
+        <div class="page-desc">Estructura completa para proponer, organizar o participar en un evento B2B.</div>
+      </div>
+      <div class="builder">
+        <div class="builder-head">
+          <div>
+            <div class="builder-head-title">Generador de prompt · Propuesta de evento</div>
+            <div class="builder-head-sub">Llena los campos para construir tu prompt personalizado</div>
+          </div>
+        </div>
+        <div class="builder-body">
+          <div class="var-section">
+            <div class="var-section-lbl">Variables del prompt</div>
+            <div class="vars-grid">
+              <div class="var-field"><label class="var-lbl">Tipo de evento</label><input class="var-input" type="text" placeholder="Ej: conferencia, webinar, feria" data-key="TIPO_EVENTO" oninput="buildPrompt('evento')"></div>
+              <div class="var-field"><label class="var-lbl">Objetivo del evento</label><input class="var-input" type="text" placeholder="Ej: generar leads, posicionar marca" data-key="OBJETIVO_EVENTO" oninput="buildPrompt('evento')"></div>
+              <div class="var-field"><label class="var-lbl">Público objetivo</label><input class="var-input" type="text" placeholder="Ej: CTOs de operadores en LATAM" data-key="PUBLICO_EVENTO" oninput="buildPrompt('evento')"></div>
+              <div class="var-field"><label class="var-lbl">Presupuesto estimado</label><input class="var-input" type="text" placeholder="Ej: USD 15,000" data-key="PRESUPUESTO_EVENTO" oninput="buildPrompt('evento')"></div>
+            </div>
+          </div>
+          <div class="output-section">
+            <div class="output-lbl">Tu prompt listo para copiar</div>
+            <div class="output-box" id="output-evento"><span class="output-empty">Completa los campos arriba para ver tu prompt.</span></div>
+          </div>
+          <div class="actions-row">
+            <button class="btn btn-primary" onclick="copyPrompt('evento')">📋 Copiar prompt</button>
+            <button class="btn btn-ghost" onclick="clearPrompt('evento')">Limpiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-caso" class="page">
+      <div class="page-header">
+        <div class="page-title">Caso de éxito</div>
+        <div class="page-desc">Estructura para redactar un case study con impacto comercial real.</div>
+      </div>
+      <div class="builder">
+        <div class="builder-head">
+          <div>
+            <div class="builder-head-title">Generador de prompt · Caso de éxito</div>
+            <div class="builder-head-sub">Llena los campos para construir tu prompt personalizado</div>
+          </div>
+        </div>
+        <div class="builder-body">
+          <div class="var-section">
+            <div class="var-section-lbl">Variables del prompt</div>
+            <div class="vars-grid">
+              <div class="var-field"><label class="var-lbl">Nombre del cliente</label><input class="var-input" type="text" placeholder="Ej: Telco Corp (o anónimo)" data-key="NOMBRE_CLIENTE" oninput="buildPrompt('caso')"></div>
+              <div class="var-field"><label class="var-lbl">Problema que tenía</label><input class="var-input" type="text" placeholder="Ej: latencia alta y falta de cobertura" data-key="PROBLEMA_CLIENTE" oninput="buildPrompt('caso')"></div>
+              <div class="var-field"><label class="var-lbl">Solución implementada</label><input class="var-input" type="text" placeholder="Ej: fibra dedicada + data center regional" data-key="SOLUCION_IMPLEMENTADA" oninput="buildPrompt('caso')"></div>
+              <div class="var-field"><label class="var-lbl">Resultado obtenido</label><input class="var-input" type="text" placeholder="Ej: -60% latencia, SLA 99.9%" data-key="RESULTADO_OBTENIDO" oninput="buildPrompt('caso')"></div>
+            </div>
+          </div>
+          <div class="output-section">
+            <div class="output-lbl">Tu prompt listo para copiar</div>
+            <div class="output-box" id="output-caso"><span class="output-empty">Completa los campos arriba para ver tu prompt.</span></div>
+          </div>
+          <div class="actions-row">
+            <button class="btn btn-primary" onclick="copyPrompt('caso')">📋 Copiar prompt</button>
+            <button class="btn btn-ghost" onclick="clearPrompt('caso')">Limpiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-resumen" class="page">
+      <div class="page-header">
+        <div class="page-title">Resumen ejecutivo</div>
+        <div class="page-desc">Convierte cualquier documento largo en un resumen de una página para C-level.</div>
+      </div>
+      <div class="builder">
+        <div class="builder-head">
+          <div>
+            <div class="builder-head-title">Generador de prompt · Resumen ejecutivo</div>
+            <div class="builder-head-sub">Llena los campos para construir tu prompt personalizado</div>
+          </div>
+        </div>
+        <div class="builder-body">
+          <div class="var-section">
+            <div class="var-section-lbl">Variables del prompt</div>
+            <div class="vars-grid">
+              <div class="var-field"><label class="var-lbl">Tipo de documento original</label><input class="var-input" type="text" placeholder="Ej: propuesta comercial, informe técnico" data-key="TIPO_DOCUMENTO" oninput="buildPrompt('resumen')"></div>
+              <div class="var-field"><label class="var-lbl">A quién va dirigido</label><input class="var-input" type="text" placeholder="Ej: CEO, directorio, inversionistas" data-key="DIRIGIDO_A" oninput="buildPrompt('resumen')"></div>
+              <div class="var-field"><label class="var-lbl">Decisión que debe tomar</label><input class="var-input" type="text" placeholder="Ej: aprobar inversión, dar luz verde" data-key="DECISION_REQUERIDA" oninput="buildPrompt('resumen')"></div>
+            </div>
+          </div>
+          <div class="output-section">
+            <div class="output-lbl">Tu prompt listo para copiar</div>
+            <div class="output-box" id="output-resumen"><span class="output-empty">Completa los campos arriba para ver tu prompt.</span></div>
+          </div>
+          <div class="actions-row">
+            <button class="btn btn-primary" onclick="copyPrompt('resumen')">📋 Copiar prompt</button>
+            <button class="btn btn-ghost" onclick="clearPrompt('resumen')">Limpiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-presupuesto" class="page">
+      <div class="page-header">
+        <div class="page-title">Propuesta de presupuesto</div>
+        <div class="page-desc">Justifica una inversión ante dirección con argumentos sólidos.</div>
+      </div>
+      <div class="builder">
+        <div class="builder-head">
+          <div>
+            <div class="builder-head-title">Generador de prompt · Propuesta de presupuesto</div>
+            <div class="builder-head-sub">Llena los campos para construir tu prompt personalizado</div>
+          </div>
+        </div>
+        <div class="builder-body">
+          <div class="var-section">
+            <div class="var-section-lbl">Variables del prompt</div>
+            <div class="vars-grid">
+              <div class="var-field"><label class="var-lbl">Inversión o gasto a justificar</label><input class="var-input" type="text" placeholder="Ej: campaña de marketing regional Q3" data-key="INVERSION_JUSTIFICAR" oninput="buildPrompt('presupuesto')"></div>
+              <div class="var-field"><label class="var-lbl">Monto solicitado</label><input class="var-input" type="text" placeholder="Ej: USD 45,000" data-key="MONTO_SOLICITADO" oninput="buildPrompt('presupuesto')"></div>
+              <div class="var-field"><label class="var-lbl">Retorno o beneficio esperado</label><input class="var-input" type="text" placeholder="Ej: 20 leads calificados, 3 contratos" data-key="RETORNO_ESPERADO" oninput="buildPrompt('presupuesto')"></div>
+              <div class="var-field"><label class="var-lbl">Quién aprueba</label><input class="var-input" type="text" placeholder="Ej: CFO, CAO, directorio" data-key="QUIEN_APRUEBA" oninput="buildPrompt('presupuesto')"></div>
+            </div>
+          </div>
+          <div class="output-section">
+            <div class="output-lbl">Tu prompt listo para copiar</div>
+            <div class="output-box" id="output-presupuesto"><span class="output-empty">Completa los campos arriba para ver tu prompt.</span></div>
+          </div>
+          <div class="actions-row">
+            <button class="btn btn-primary" onclick="copyPrompt('presupuesto')">📋 Copiar prompt</button>
+            <button class="btn btn-ghost" onclick="clearPrompt('presupuesto')">Limpiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-research" class="page">
+      <div class="page-header">
+        <div class="page-title">Investigación online</div>
+        <div class="page-desc">Research estructurado: competencia, tendencias, benchmarks de sector.</div>
+      </div>
+      <div class="builder">
+        <div class="builder-head">
+          <div>
+            <div class="builder-head-title">Generador de prompt · Investigación online</div>
+            <div class="builder-head-sub">Llena los campos para construir tu prompt personalizado</div>
+          </div>
+        </div>
+        <div class="builder-body">
+          <div class="var-section">
+            <div class="var-section-lbl">Variables del prompt</div>
+            <div class="vars-grid">
+              <div class="var-field"><label class="var-lbl">¿Qué quieres investigar?</label><input class="var-input" type="text" placeholder="Ej: competidores en México, tendencias data centers" data-key="OBJETO_INVESTIGACION" oninput="buildPrompt('research')"></div>
+              <div class="var-field"><label class="var-lbl">Objetivo del research</label><input class="var-input" type="text" placeholder="Ej: preparar propuesta comercial" data-key="OBJETIVO_RESEARCH" oninput="buildPrompt('research')"></div>
+              <div class="var-field"><label class="var-lbl">Industria o sector</label><input class="var-input" type="text" placeholder="Ej: telecomunicaciones, cloud en LATAM" data-key="INDUSTRIA_SECTOR" oninput="buildPrompt('research')"></div>
+              <div class="var-field"><label class="var-lbl">Formato del resultado</label><input class="var-input" type="text" placeholder="Ej: tabla comparativa, resumen ejecutivo" data-key="FORMATO_RESULTADO" oninput="buildPrompt('research')"></div>
+            </div>
+          </div>
+          <div class="output-section">
+            <div class="output-lbl">Tu prompt listo para copiar</div>
+            <div class="output-box" id="output-research"><span class="output-empty">Completa los campos arriba para ver tu prompt.</span></div>
+          </div>
+          <div class="actions-row">
+            <button class="btn btn-primary" onclick="copyPrompt('research')">📋 Copiar prompt</button>
+            <button class="btn btn-ghost" onclick="clearPrompt('research')">Limpiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="toast" id="toast">✓ Prompt copiado al portapapeles</div>
+
+<script>
+const TEMPLATES = {
+  linkedin: {
+    keys: ['TEMA_O_INSIGHT','TONO','CTA'],
+    template: `Eres redactor experto en contenido B2B para redes profesionales.
+
+Tema o insight: [TEMA_O_INSIGHT]
+Tono: [TONO]
+CTA: [CTA]
+
+Reglas:
+- La primera línea debe detener el scroll. Nada de "Estamos orgullosos de..." ni "Emocionados de compartir..."
+- Voz profesional, directa, estratégica — sin tono promocional
+- Arranca con datos o un insight, no con el nombre de la empresa
+- Máximo 180 palabras
+- Cierra con un CTA corto que invite respuesta, no clics
+- Sin spam de hashtags. Máximo 3 hashtags relevantes al final`
+  },
+  brief: {
+    keys: ['OBJETIVO_CAMPANA','PUBLICO_OBJETIVO','MENSAJE_CLAVE'],
+    template: `Crea un brief de campaña B2B.
+
+Objetivo de la campaña: [OBJETIVO_CAMPANA]
+Público objetivo: [PUBLICO_OBJETIVO]
+Mensaje clave: [MENSAJE_CLAVE]
+
+Estructura el brief así:
+1. Objetivo (una frase, medible)
+2. Audiencia (cargo, dolor principal, motivador)
+3. Mensaje central (qué queremos que crean o hagan)
+4. Tono y voz (estratégico, confiable, basado en datos)
+5. Canales recomendados (máx. 3 con justificación breve)
+6. Métricas de éxito (KPIs)
+7. Call to action
+
+Menos de 350 palabras. Sin relleno.`
+  },
+  web: {
+    keys: ['PAGINA_O_SECCION','OBJETIVO_SECCION','DATO_CLAVE'],
+    template: `Escribe copy para una sección de sitio web.
+
+Sección: [PAGINA_O_SECCION]
+Objetivo: [OBJETIVO_SECCION]
+Dato clave a incluir: [DATO_CLAVE]
+
+Requisitos:
+- Titular: máx. 8 palabras, sin verbo "ser"
+- Subtítulo: 1 frase que responda "¿por qué importa esto?"
+- Cuerpo: 2–3 párrafos cortos, con datos donde sea posible
+- CTA: claro, directo, sin agresividad
+- Voz: experta, clara, estratégica — nunca comercial`
+  },
+  onepager: {
+    keys: ['PRODUCTO_SOLUCION','PERFIL_CLIENTE','DIFERENCIADORES'],
+    template: `Escribe un one-pager comercial.
+
+Producto / solución: [PRODUCTO_SOLUCION]
+Cliente objetivo: [PERFIL_CLIENTE]
+Diferenciadores: [DIFERENCIADORES]
+
+Estructura:
+1. Encabezado: titular potente + propuesta de valor en una línea
+2. El problema: lo que enfrenta el cliente (2–3 frases)
+3. La solución: cómo lo resolvemos, con datos si aplica
+4. Por qué nosotros: 3 diferenciadores en lenguaje claro
+5. Prueba: un dato o resultado de cliente
+6. Próximo paso: CTA directo
+
+Tono: directo, experto, B2B. Sin superlativos sin evidencia. Máximo 300 palabras.`
+  },
+  email: {
+    keys: ['DESTINATARIO_CARGO','PROPOSITO_EMAIL','PEDIDO_PROXIMO_PASO'],
+    template: `Escribe un email ejecutivo.
+
+Destinatario: [DESTINATARIO_CARGO]
+Propósito: [PROPOSITO_EMAIL]
+Pedido / próximo paso: [PEDIDO_PROXIMO_PASO]
+
+Reglas:
+- Asunto: claro, sin relleno, máx. 8 palabras
+- Apertura: ve al grano en la primera frase. Nada de "Espero que este mensaje te encuentre bien."
+- Cuerpo: contexto → punto clave → pedido. Máx. 3 párrafos cortos
+- Cierre: un único próximo paso claro, con fecha si es posible
+- Tono: profesional, entre pares, respetuoso del tiempo del otro
+- Máximo 150 palabras en el cuerpo`
+  },
+  anuncio: {
+    keys: ['QUE_SE_ANUNCIA','A_QUIEN_AFECTA','ACCION_REQUERIDA'],
+    template: `Escribe un anuncio comunicativo interno para el equipo.
+
+Anuncio: [QUE_SE_ANUNCIA]
+A quién afecta: [A_QUIEN_AFECTA]
+Acción requerida: [ACCION_REQUERIDA]
+
+Estructura:
+- Apertura: lo que pasa, en la primera frase
+- Contexto: por qué ocurre (1–2 frases)
+- Impacto: qué cambia para el equipo
+- Acción: si deben hacer algo, que sea explícito
+- Cierre: positivo pero sin exageración
+
+Tono: transparente, claro, sin spin corporativo. Máximo 200 palabras.`
+  },
+  update: {
+    keys: ['PROYECTO_INICIATIVA','ESTADO_ACTUAL','RIESGOS_BLOQUEOS'],
+    template: `Escribe un update de estado para stakeholders.
+
+Proyecto: [PROYECTO_INICIATIVA]
+Estado actual: [ESTADO_ACTUAL]
+Riesgos o bloqueos: [RIESGOS_BLOQUEOS]
+
+Formato:
+1. Resumen de estado (1 frase — Verde / Amarillo / Rojo y por qué)
+2. Qué se logró desde el último update (bullets, máx. 4)
+3. Qué sigue (2–3 prioridades del próximo período)
+4. Riesgos o bloqueos (sin suavizar — dilo claro)
+5. Decisión o apoyo que se necesita (si aplica)
+
+Tono: factual, conciso, sin adornos. Máximo 250 palabras.`
+  },
+  slack: {
+    keys: ['CONTEXTO_MENSAJE','NECESITAS_DEL_RECEPTOR','NIVEL_URGENCIA'],
+    template: `Escribe un mensaje profesional para Slack o chat de equipo.
+
+Contexto: [CONTEXTO_MENSAJE]
+Qué necesitas del receptor: [NECESITAS_DEL_RECEPTOR]
+Urgencia: [NIVEL_URGENCIA]
+
+Reglas:
+- Máximo 4 frases
+- Si pides algo: ponlo en la primera frase
+- Si compartes info: arranca con el dato clave
+- Urgencia alta: menciona el deadline explícitamente
+- Sin relleno: nada de "quería consultarte" ni "espero que estés bien"`
+  },
+  agenda: {
+    keys: ['PROPOSITO_REUNION','ASISTENTES_ROLES','RESULTADO_ESPERADO'],
+    template: `Crea una agenda estructurada para una reunión.
+
+Propósito: [PROPOSITO_REUNION]
+Asistentes: [ASISTENTES_ROLES]
+Resultado esperado: [RESULTADO_ESPERADO]
+
+Formato:
+- Título de la reunión (claro, no genérico)
+- Fecha / Hora / Duración (placeholder)
+- Resultado esperado: una frase que defina qué significa "listo"
+- Puntos de agenda (máx. 5):
+  - Nombre del punto
+  - Responsable
+  - Tiempo asignado
+  - Tipo: [decisión necesaria / update / discusión]
+- Pre-lectura: qué deben revisar antes
+
+Si no cabe en 30 minutos, indicarlo en la agenda.`
+  },
+  acta: {
+    keys: ['NOTAS_PUNTOS_CLAVE','ASISTENTES','FECHA_LIMITE'],
+    template: `Escribe el acta de una reunión.
+
+Notas / puntos clave: [NOTAS_PUNTOS_CLAVE]
+Asistentes: [ASISTENTES]
+Acciones a completar antes de: [FECHA_LIMITE]
+
+Estructura:
+1. Objetivo de la reunión (1 frase)
+2. Decisiones tomadas (bullets — solo decisiones, no discusión)
+3. Tabla de acuerdos:
+   | Acuerdo | Responsable | Fecha límite |
+4. Temas abiertos / pendientes
+5. Próxima reunión: fecha/hora si se acordó
+
+Tono: factual, cero interpretación. Máximo 300 palabras.`
+  },
+  prep: {
+    keys: ['TIPO_REUNION_ASISTENTES','OBJETIVO_REUNION','RIESGOS_SENSIBILIDADES'],
+    template: `Crea un brief de preparación para una reunión importante.
+
+Reunión: [TIPO_REUNION_ASISTENTES]
+Objetivo: [OBJETIVO_REUNION]
+Riesgos o sensibilidades: [RIESGOS_SENSIBILIDADES]
+
+Incluye:
+1. Objetivo: ¿qué queremos conseguir al salir?
+2. Su agenda probable: ¿qué les importa a ellos?
+3. Nuestros mensajes clave: 2–3 puntos que debemos dejar claros
+4. Objeciones posibles y cómo manejarlas
+5. Líneas rojas: a qué no vamos a ceder
+6. Resultado ideal vs. resultado aceptable
+7. Frase de apertura sugerida
+
+Documento para preparación interna. Máximo 350 palabras.`
+  },
+  evento: {
+    keys: ['TIPO_EVENTO','OBJETIVO_EVENTO','PUBLICO_EVENTO','PRESUPUESTO_EVENTO'],
+    template: `Crea una propuesta de evento B2B.
+
+Tipo de evento: [TIPO_EVENTO]
+Objetivo: [OBJETIVO_EVENTO]
+Público objetivo: [PUBLICO_EVENTO]
+Presupuesto estimado: [PRESUPUESTO_EVENTO]
+
+Estructura:
+1. Nombre sugerido y concepto central (1-2 frases)
+2. Objetivo medible: qué queremos lograr y cómo lo medimos
+3. Público objetivo: perfil, cargo, motivación para asistir
+4. Formato y duración recomendados
+5. Contenido o agenda sugerida (máx. 5 bloques)
+6. Canales de convocatoria recomendados
+7. Presupuesto estimado por partida
+8. KPIs de éxito
+9. Próximos pasos con responsables y fechas
+
+Máximo 400 palabras.`
+  },
+  caso: {
+    keys: ['NOMBRE_CLIENTE','PROBLEMA_CLIENTE','SOLUCION_IMPLEMENTADA','RESULTADO_OBTENIDO'],
+    template: `Escribe un caso de éxito de cliente.
+
+Cliente: [NOMBRE_CLIENTE]
+Problema: [PROBLEMA_CLIENTE]
+Solución implementada: [SOLUCION_IMPLEMENTADA]
+Resultado obtenido: [RESULTADO_OBTENIDO]
+
+Estructura:
+1. Titular: una frase que capture el impacto (máx. 10 palabras)
+2. El cliente: contexto breve
+3. El problema: describe el pain point con precisión
+4. La solución: qué se implementó y por qué fue la opción correcta
+5. Los resultados: datos concretos — porcentajes, tiempos, SLAs
+6. Cita del cliente o frase de impacto
+7. CTA o mensaje de cierre
+
+Tono: experto, basado en datos, B2B. Máximo 350 palabras.`
+  },
+  resumen: {
+    keys: ['TIPO_DOCUMENTO','DIRIGIDO_A','DECISION_REQUERIDA'],
+    template: `Genera un resumen ejecutivo de una página.
+
+Documento original: [TIPO_DOCUMENTO]
+Dirigido a: [DIRIGIDO_A]
+Decisión requerida: [DECISION_REQUERIDA]
+
+Incluye:
+1. Contexto (2-3 frases): de qué trata este documento
+2. El problema u oportunidad: qué está en juego
+3. La propuesta o solución: qué se recomienda hacer
+4. Impacto esperado: beneficios concretos y medibles
+5. Inversión requerida: recursos, tiempo, dinero
+6. La decisión: qué se necesita aprobar y para cuándo
+
+Lenguaje ejecutivo: claro, directo. Máximo 300 palabras.`
+  },
+  presupuesto: {
+    keys: ['INVERSION_JUSTIFICAR','MONTO_SOLICITADO','RETORNO_ESPERADO','QUIEN_APRUEBA'],
+    template: `Escribe una propuesta de presupuesto.
+
+Inversión a justificar: [INVERSION_JUSTIFICAR]
+Monto solicitado: [MONTO_SOLICITADO]
+Retorno o beneficio esperado: [RETORNO_ESPERADO]
+Quién aprueba: [QUIEN_APRUEBA]
+
+Estructura:
+1. Resumen de la solicitud: qué se pide, cuánto, para qué
+2. Contexto estratégico: por qué esta inversión es relevante ahora
+3. Desglose del presupuesto: partidas principales con montos
+4. Retorno esperado: resultados concretos y con plazo
+5. Riesgo de no invertir: qué pasa si no se aprueba
+6. Alternativas consideradas
+7. Próximos pasos para proceder
+
+Tono: objetivo, basado en datos. Máximo 400 palabras.`
+  },
+  research: {
+    keys: ['OBJETO_INVESTIGACION','OBJETIVO_RESEARCH','INDUSTRIA_SECTOR','FORMATO_RESULTADO'],
+    template: `Actúa como analista de inteligencia competitiva.
+
+Quiero investigar: [OBJETO_INVESTIGACION]
+Objetivo: [OBJETIVO_RESEARCH]
+Industria / sector: [INDUSTRIA_SECTOR]
+Formato del resultado: [FORMATO_RESULTADO]
+
+Incluye:
+1. Contexto del tema: qué está pasando en este espacio hoy
+2. Principales actores o referencias (con datos verificables)
+3. Tendencias relevantes en los últimos 12 meses
+4. Diferencias clave entre actores analizados
+5. Oportunidades o gaps identificados
+6. Fuentes recomendadas para profundizar
+
+Reglas:
+- Distingue entre datos verificados y estimaciones
+- Si no tienes información actualizada, indícalo
+- Formato del resultado: [FORMATO_RESULTADO]`
+  }
+};
+
+function navigate(page, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  el.classList.add('active');
+}
+
+function buildPrompt(id) {
+  const tpl = TEMPLATES[id];
+  const box = document.getElementById('output-' + id);
+  const inputs = box.closest('.builder-body').querySelectorAll('.var-input');
+  let text = tpl.template;
+  let anyFilled = false;
+  inputs.forEach(input => {
+    const key = input.dataset.key;
+    const val = input.value.trim();
+    if (val) { text = text.split('[' + key + ']').join(val); anyFilled = true; }
+  });
+  if (!anyFilled) {
+    box.innerHTML = '<span class="output-empty">Completa los campos arriba para ver tu prompt.</span>';
+    return;
+  }
+  tpl.keys.forEach(k => {
+    const regex = new RegExp('\\[' + k + '\\]', 'g');
+    text = text.replace(regex, '<span class="hl">[' + k + ']</span>');
+  });
+  box.innerHTML = text;
+}
+
+function copyPrompt(id) {
+  const box = document.getElementById('output-' + id);
+  const text = box.innerText;
+  if (!text || text.includes('Completa los campos')) return;
+  navigator.clipboard.writeText(text).then(() => {
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2400);
+  });
+}
+
+function clearPrompt(id) {
+  const box = document.getElementById('output-' + id);
+  box.closest('.builder-body').querySelectorAll('.var-input').forEach(i => i.value = '');
+  box.innerHTML = '<span class="output-empty">Completa los campos arriba para ver tu prompt.</span>';
+}
+</script>
+</body>
+</html>
